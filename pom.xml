@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.fujitsu.fs.demo</groupId>
+	<artifactId>DEMO_File</artifactId>
+	<packaging>war</packaging>
+	<version>10.1</version>
+	<name>DEMO File Maven Webapp</name>
+	<url>http://62.60.42.82:8081/repository/maven-public/</url>
+
+	<!-- <repositories>
+		<repository>
+			<id>maven2-repository.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://62.60.42.82:8081/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories> -->
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-bundle</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+		<dependency>
+		
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.19.4</version>
+		</dependency>
+
+	</dependencies>
+	
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Releases Repository</name>
+			<url>
+			http://62.60.42.82:8081/repository/maven-releases/
+			</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Snapshot Repository</name>
+			<url>
+			http://62.60.42.82:8081/repository/maven-snapshots/
+			</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<finalName>DEMO_File</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+          		<artifactId>maven-compiler-plugin</artifactId>
+          		<version>3.7.0</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+			 <artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>initialize</phase>
+						<goals>
+						<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>												
+			</plugin>
+			 <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+				 <configuration>
+                    <branchName>master</branchName>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
+					  <checkModificationExcludes>
+						<checkModificationExclude>pom.xml</checkModificationExclude>
+						<checkModificationExclude>**</checkModificationExclude>
+					  </checkModificationExcludes>
+                </configuration>
+            </plugin>
+		</plugins>
+	</build>
+	  <scm>
+        <url>https://github.com/nshah14/rest-java-app.git</url>
+		<connection>scm:git:https://github.com/nshah14/rest-java-app.git</connection>
+        <tag>HEAD</tag>
+      </scm>
+</project>

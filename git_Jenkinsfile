@@ -1,0 +1,210 @@
+#!/usr/bin/env groovy
+def validate
+node {
+    checkout scm
+    def rootDir = pwd()
+    println("Current Directory: " + rootDir)
+    validate = load "${rootDir}/validate.groovy"  
+    // validate.printSomething()
+    props = readProperties file:'dev.txt'
+    NOCHANGE_STATUS=props['NOCHANGE_STATUS']
+    IN_PROGRESS_ID=props['IN_PROGRESS_ID']
+    TO_DO_ID=props['TO_DO_ID']
+    DEPLOY_TO_TEST_ID =props['DEPLOY_TO_TEST_ID']
+    DEVELOPMENT_COMPLETE_ID=props['DEVELOPMENT_COMPLETE']
+    PROJECT=props['PROJECT']
+    SITE=props['SITE']
+    IN_PROGRESS_KEY=props['IN_PROGRESS_KEY']
+    DEVELOPMENT_COMPLETE_KEY=props['DEVELOPMENT_COMPLETE_KEY']
+    TO_DO_KEY=props['TO_DO_KEY']
+}
+
+pipeline {
+  
+    agent { label 'build' }
+    environment {
+        JIRA_ISSUE_KEY='none'
+        //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
+        IMAGE = readMavenPom().getArtifactId()
+        VERSION = readMavenPom().getVersion()
+        BUILD_RELEASE_VERSION = readMavenPom().getVersion().replace("-SNAPSHOT", ".1.1")
+        IS_SNAPSHOT = readMavenPom().getVersion().endsWith("-SNAPSHOT")
+        NEW_VERSION = readMavenPom().getVersion()
+        JIRA_SITE='JIRA'
+        SVN_COMMIT_MSG="empty msg"
+        GIT_COMMIT_MSG = sh(script: 'git log -1 --oneline')
+        GIT_COMMIT_AUTHOR = sh(script: 'git log --format="medium" -1 ${GIT_COMMIT}')
+        GIT_COMMIT_PRETTY = sh(script: 'git log -1 --pretty=%B' , returnStdout: true).trim()
+    }
+    tools { 
+        jdk 'jdk'
+        maven 'maven 3.5.3' 
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                   
+                ''' 
+            }
+        }
+
+
+        stage ('Build') {
+            
+            steps {
+              
+                echo " Project version is ${VERSION}"
+                echo "Artifact id is ${IMAGE}"
+                echo "Build release version is ${BUILD_RELEASE_VERSION}"
+                echo " is it snapshot ${IS_SNAPSHOT}"
+                echo "commit log ${GIT_COMMIT_MSG}"
+            
+                script{
+                    environment {
+                        NEW_VERSION = readMavenPom().getVersion()
+                        echo " Project new  version is ${NEW_VERSION}"
+                    }
+                }
+                
+                 sh '''
+                    
+                    mvn clean install
+
+                ''' 
+                script{
+                    environment {
+                        NEW_VERSION = readMavenPom().getVersion()
+                        echo " Project new  version in build is ${NEW_VERSION}"
+                    }
+                }
+            }
+        }
+        stage('Artifact To Nexus'){
+            steps{
+                sh '''
+                    mvn deploy
+                ''' 
+            }
+        }
+        stage('Update JIRA status') {
+           
+            steps{
+                 script{
+                        // def fixVersion
+                        def serverInfo = jiraGetServerInfo()
+                        echo "in Jira Stage"
+                        def fixVersion
+                        def versionId
+                        def fixNewVersion
+                            try{
+
+                                fixNewVersion =  jiraNewVersion version: [name: "${VERSION}",
+                                                                            project: "${PROJECT}"]
+                                fixVersion = fixNewVersion.data
+
+                            }
+                            catch(Exception e){
+                                echo "version already exist re use the existing one"
+                                
+                                def searchVersion = jiraJqlSearch jql: " fixVersion=${VERSION}"
+                                echo "searchVersion"+searchVersion
+                            
+                                for (i = 0; i <searchVersion.data.issues.size(); i++) {
+                                    fixVersion= searchVersion.data.issues[i].fields.fixVersions[0]
+                                    versionId = searchVersion.data.issues[i].fields.fixVersions.id[0]
+                                }
+                                echo "version id "+versionId
+                                echo "fixversion  id "+fixVersion
+                            }
+                        
+                        println "${GIT_COMMIT_PRETTY}".tokenize("-")
+                        "${GIT_COMMIT_PRETTY}".tokenize(",").each {
+
+
+                                println "Number ${it}"
+                                JIRA_ISSUE_KEY = it
+                                def searchResults = jiraJqlSearch jql: "project = ${PROJECT} AND issuekey = ${it}"
+                                def issues = searchResults.data.issues
+                                jiraComment(issueKey: "${it}",
+                                    body: " Project issue fix  version is ${VERSION}"
+                                )
+                                validate.setTransitions(DEVELOPMENT_COMPLETE_ID, "${it}", SITE)
+                                echo "Moved to development complete"
+                                // fixVersion = VERSION;
+                                def testIssue = [fields: [fixVersions: [fixVersion]]]
+                                response = jiraEditIssue idOrKey: it, issue: testIssue
+                                
+                            }
+                        
+                 }
+            }
+        }
+       stage('Move parent jira to desired state'){
+        steps{
+            script{
+                try
+                {
+                    def fields = jiraGetFields idOrKey: '${JIRA_ISSUE_KEY}', site: "${SITE}"
+                  
+                    echo "issue key is ${JIRA_ISSUE_KEY}"
+                    def linked_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY})",site: "${SITE}"
+                    def linked_issue_status = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY}) AND status = '${DEVELOPMENT_COMPLETE_KEY}'",site: "${SITE}"
+                    def issues_with_status = linked_issue_status.data.issues
+                    echo " size of the array which has linked issue status"+issues_with_status.size()
+                
+                    def links = linked_issues.data.issues
+                    echo " size of the array which has linked issue"+links.size()
+                   
+                    if(links.size() == issues_with_status.size())
+                    {
+                        echo "all the issues are linked have been already in desired state"
+                        NOCHANGE_STATUS = "TRUE"
+                    }
+                    else{
+
+                        echo "Execute step -- Jira Update To In Progress"
+                        
+                    }
+                }
+                catch(error){
+                   
+                    validate.rollback(JIRA_ISSUE_KEY, DEVELOPMENT_COMPLETE_KEY, SITE, PROJECT, IN_PROGRESS_ID)
+                    throw Exception
+                }
+
+
+        
+               
+            }
+        }
+    }
+    stage('Jira Update To Development Complete'){
+    
+            steps{
+                script{
+                    try{
+                        if(NOCHANGE_STATUS=="FALSE")
+                        {
+                            def linked_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY})",site: "${SITE}"
+                            def links = linked_issues.data.issues
+                            echo "issue array size  is "+links.size()
+                            for (i = 0; i <links.size(); i++) {  
+                                echo "link issue "+links[i].key
+                                validate.setTransitions(DEVELOPMENT_COMPLETE_ID, links[i].key, SITE)
+                                
+                            }
+                        }
+                    }
+                    catch(error){
+                       validate.rollback(JIRA_ISSUE_KEY, DEVELOPMENT_COMPLETE_KEY, SITE, PROJECT, IN_PROGRESS_ID)
+                        throw Exception
+                    }
+                }
+             }
+         }
+    }
+}
+

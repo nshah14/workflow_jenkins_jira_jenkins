@@ -12,7 +12,7 @@ node {
     TO_DO_KEY=props['TO_DO_KEY']
 }
 pipeline {
-   agent { label 'build' }
+   agent any
    environment {
        EXCEPTION="NONE"
     }

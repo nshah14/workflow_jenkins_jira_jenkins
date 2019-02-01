@@ -20,7 +20,10 @@ node {
 }
 pipeline {
    agent { label 'build' }
-  
+  tools { 
+        git 'Git'
+        
+    }
    stages{
        
      stage('Intialize'){

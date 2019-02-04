@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  gather_facts: false
+  #become: false
+  vars:
+    repository_url: 'http://62.60.42.82:8081/repository/maven-releases/'
+    
+    version: latest
+    #read tmp from environment?
+    state: present
+    tmpdir: '/home/k5user'
+    filelist:
+      - osr_app_v2_bin.zip
+    artefact:
+      - { 
+      group_id: com.fujitsu.fs.demo,
+      artifact_id: DEMO_File,
+#      version: latest,
+      classifier: , 
+      extension: war, 
+      src: "{{ tmpdir  }}", 
+      dest: "{{ tmpdir }}" 
+      }
+
+  tasks:
+  
+  - name: Download files to be delivered
+    maven_artifact:
+      group_id: "{{ item.group_id }}"
+      artifact_id: "{{ item.artifact_id }}"
+ #     version: "{{ item.version }}"
+      version: "{{ version }}"
+      classifier: "{{ item.classifier }}"
+      extension: "{{ item.extension }}"
+      repository_url: "{{ repository_url }}"
+      dest:  "{{ tmpdir }}/{{ item.artifact_id }}.{{ item.extension }}"
+    with_items: "{{ artefact }}"

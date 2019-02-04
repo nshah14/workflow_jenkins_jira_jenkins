@@ -128,22 +128,22 @@ pipeline {
             
             post {
                 success {
-                            emailext to:"naved.shah@uk.fujitsu.com,steve.aston@fujitsu.co.uk",
+                            emailext to:"navedshah@sbcons.net",
                             subject:"SUCCESS: ${currentBuild.fullDisplayName} and deployed build  ${JIRA_ISSUE_ATT}",
                             body: "Yay, we passedand deployed ${JIRA_ISSUE_ATT} You got mail from pipeline, How you doing? its beer time..."
                 }
                 failure {
-                            emailext to:"naved.shah@uk.fujitsu.com,steve.aston@fujitsu.co.uk", 
+                            emailext to:"navedshah@sbcons.net", 
                             subject:"FAILURE: ${currentBuild.fullDisplayName}", 
                             body: "Boo, we failed."
                 }
                 unstable {
-                            emailext to:"naved.shah@uk.fujitsu.com,steve.aston@fujitsu.co.uk", 
+                            emailext to:"navedshah@sbcons.net", 
                             subject:"UNSTABLE: ${currentBuild.fullDisplayName}", 
                             body: "Huh, we're unstable."
                 }
                 changed {
-                            emailext to:"naved.shah@uk.fujitsu.com,steve.aston@fujitsu.co.uk", 
+                            emailext to:"navedshah@sbcons.net", 
                             subject:"CHANGED: ${currentBuild.fullDisplayName}", 
                             body: "Wow, our status changed! we green now ... "
                 }

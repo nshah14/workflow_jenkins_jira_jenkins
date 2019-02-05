@@ -199,11 +199,12 @@ pipeline {
                                 def childern_status_issues =linked_childern_status_issues.data.issues
                                 for (j = 0; j < childern_links.size(); j++)
                                 {
-                                    if(childern_status_issues.contains(childern_links[j].key)
+                                    if(childern_status_issues.contains(childern_links[j].key))
                                     {
                                         echo "issue is moved"
                                     }
-                                    else{
+                                    else
+                                    {
                                         NOCHANGE_STATUS = "FALSE"
                                     }
                                     // project = pwc AND status = open AND issuekey = childern_links[j].key

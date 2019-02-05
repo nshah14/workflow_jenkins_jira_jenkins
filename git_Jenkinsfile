@@ -199,6 +199,8 @@ pipeline {
                                 def childern_status_issues =linked_childern_status_issues.data.issues
                                 for (j = 0; j < childern_links.size(); j++)
                                 {
+                                    echo "array of childern issues from specific status "+childern_status_issues
+                                    echo "issue which is being checked "+childern_links[j].key
                                     if(childern_status_issues.contains(childern_links[j].key))
                                     {
                                         echo "issue is moved"

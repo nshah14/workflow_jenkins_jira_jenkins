@@ -193,7 +193,27 @@ pipeline {
                             echo "issue array size  is "+links.size()
                             for (i = 0; i <links.size(); i++) {  
                                 echo "link issue "+links[i].key
-                                validate.setTransitions(DEVELOPMENT_COMPLETE_ID, links[i].key, SITE)
+                                def linked_childern_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${links[i].key})",site: "${SITE}"
+                                def childern_links = linked_childern_issues.data.issues
+                                def linked_childern_status_issues = jiraJqlSearch jql:"project = ${PROJECT} AND status in (${DEVELOPMENT_COMPLETE_ID})",site: "${SITE}"
+                                def childern_status_issues =linked_childern_status_issues.data.issues
+                                for (j = 0; j < childern_links.size(); j++)
+                                {
+                                    if(childern_status_issues.contains(childern_links[j].key)
+                                    {
+                                        echo "issue is moved"
+                                    }
+                                    else{
+                                        NOCHANGE_STATUS = "FALSE"
+                                    }
+                                    // project = pwc AND status = open AND issuekey = childern_links[j].key
+                                    
+                                    //project = pwc AND status in (DEVELOPMENT_COMPLETE_ID)
+                                }
+                                if(NOCHANGE_STATUS=="FALSE")
+                                {
+                                    validate.setTransitions(DEVELOPMENT_COMPLETE_ID, links[i].key, SITE)
+                                }
                                 
                             }
                         }

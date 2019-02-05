@@ -201,7 +201,7 @@ pipeline {
                                     def check_child_issue_status = jiraJqlSearch jql:"project = ${PROJECT} AND issue = ${childern_links[j].key} AND status = '${DEVELOPMENT_COMPLETE_KEY}'",site: "${SITE}"
                                     def list_check_child_issue_status = check_child_issue_status.data.issues
                                     echo " size of the array which has rollback issue"+list_check_child_issue_status.size()
-                                    if(list_check_child_issue_status  > 0  )
+                                    if(list_check_child_issue_status.size()  > 0  )
                                     {
                                         echo "issue is moved"
                                         NOCHANGE_STATUS = "FALSE"

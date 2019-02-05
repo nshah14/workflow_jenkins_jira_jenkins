@@ -195,7 +195,7 @@ pipeline {
                                 echo "link issue "+links[i].key
                                 def linked_childern_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${links[i].key})",site: "${SITE}"
                                 def childern_links = linked_childern_issues.data.issues
-                                def linked_childern_status_issues = jiraJqlSearch jql:"project = ${PROJECT} AND status in (${DEVELOPMENT_COMPLETE_ID})",site: "${SITE}"
+                                def linked_childern_status_issues = jiraJqlSearch jql:"project = ${PROJECT} AND status in (${DEVELOPMENT_COMPLETE_KEY})",site: "${SITE}"
                                 def childern_status_issues =linked_childern_status_issues.data.issues
                                 for (j = 0; j < childern_links.size(); j++)
                                 {

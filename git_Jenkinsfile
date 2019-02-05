@@ -210,6 +210,7 @@ pipeline {
                                     {
                                        echo "childern is still in In Progress state so cant move parent now"
                                        NOCHANGE_STATUS = "TRUE"
+                                       break;
                                     }
                                    
                                 }

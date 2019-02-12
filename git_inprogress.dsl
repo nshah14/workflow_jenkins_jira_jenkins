@@ -99,7 +99,7 @@ pipeline {
                                 println('Response: '+res.content)
                                 println('jira status :'+res)
                                 def myObject = readJSON text: res.content
-                                echo "data"+myObject
+                                echo "data"+myObject.fields.status.name
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

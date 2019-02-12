@@ -46,7 +46,7 @@ pipeline {
                     def linked_issue_status = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY}) AND status = '${IN_PROGRESS_KEY}'",site: "${SITE}"
                     def issues_with_status = linked_issue_status.data.issues
                     echo " size of the array which has linked issue status"+issues_with_status.size()
-                
+                    
                     def links = linked_issues.data.issues
                     echo " size of the array which has linked issue"+links.size()
                    
@@ -85,7 +85,7 @@ pipeline {
                             echo "issue array size  is "+links.size()
                             for (i = 0; i <links.size(); i++) {  
                                 echo "link issue "+links[i].key
-                               
+                                echo "current status of the issue "+links[i].getStatusObject().getName()
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

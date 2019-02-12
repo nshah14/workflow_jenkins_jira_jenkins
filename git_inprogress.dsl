@@ -96,7 +96,7 @@ pipeline {
                                 // println('jira status :'+res)
                                 // def myObject = readJSON text: res.content
                                 // echo "data"+myObject.fields.status.name
-                                if(checkStatusif(TO_DO_KEY, "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status", credential))
+                                if(validate.checkStatus(TO_DO_KEY, "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status", credential))
                                 {
                                     validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 }

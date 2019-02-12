@@ -96,7 +96,7 @@ pipeline {
                                 def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
                                 println('Status: '+res.status)
                                 println('Response: '+res.content)
-                                println('jira status :'+res.content.fields.status.name)
+                                println('jira status :'+res.fields)
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

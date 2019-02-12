@@ -99,12 +99,12 @@ pipeline {
                                 // println('jira status :'+res)
                                 // def myObject = readJSON text: res.content
                                 // echo "data"+myObject.fields.status.name
-                                if(validate.checkStatus(TO_DO_KEY, "http://62.60.42.37:8080/rest/api/2/issue/${links[i].key}?fields=status", credential))
+                                if(validate.checkStatus(TO_DO_KEY, "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${links[i].key}?fields=status", credential))
                                 {
                                     validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                     //check linked issues
                                     
-                                    def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/${links[i].key}?fields=issuelinks"
+                                    def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${links[i].key}?fields=issuelinks"
                                     def link_res_json = readJSON text: link_issue_response.content
                                     for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)
                                     {

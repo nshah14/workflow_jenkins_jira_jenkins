@@ -99,6 +99,19 @@ pipeline {
                                 if(validate.checkStatus(TO_DO_KEY, "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status", credential))
                                 {
                                     validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
+                                    //check linked issues
+                                    
+                                    def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-5?fields=issuelinks"
+                                    def link_res_json = readJSON text: link_issue_response.content
+                                    for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)
+                                    {
+                                        println("---------------${count}--------------------")
+                                        def link = link_res_json.fields.issuelinks[count]
+                                        println(' outwardIssue link  type  :'+link.type.name)
+                                        println(' link outwardIssue issue key :'+link.outwardIssue.key)
+                                        println(' status of outwardIssue :'+link.outwardIssue.fields.status.name)
+                                    }
+                                    
                                 }
                                 else
                                 {

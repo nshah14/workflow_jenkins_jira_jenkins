@@ -108,9 +108,19 @@ pipeline {
                                         println("---------------${count}--------------------")
                                         def link = link_res_json.fields.issuelinks[count]
                                         println(' outwardIssue link  type  :'+link.type.name)
-                                        println(' link outwardIssue issue key :'+link.outwardIssue.key)
+                                        def issue_link_name =link.type.name
                                         println(' status of outwardIssue :'+link.outwardIssue.fields.status.name)
+                                        def issue_status = link.outwardIssue.fields.status.name
                                         println(' type of outwardIssue :'+link.outwardIssue.fields.issuetype.name)
+                                        def issue_type = link.outwardIssue.fields.issuetype.name
+                                        println(' link outwardIssue issue key :'+link.outwardIssue.key)
+                                        def issue_key = link.outwardIssue.key
+                                        if(PARENT_ISSUE_TYPE == issue_type && PARENT_ISSUE_RELATE == issue_link_name && PARENT_ISSUE_STATUS = issue_type)
+                                        {
+                                            println ( "met all conditions ")
+                                            validate.setTransitions(IN_PROGRESS_ID, issue_key, SITE)
+                                            break;
+                                        }
                                     }
                                     
                                 }

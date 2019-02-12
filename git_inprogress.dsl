@@ -87,6 +87,10 @@ pipeline {
                                 echo "link issue "+links[i].key
                                 echo "current status of the issue "+links[i]
                                 echo "****************************************************************************"
+                                ///
+                                def response = httpRequest "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                println('Status: '+response.status)
+                                println('Response: '+response.content)
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

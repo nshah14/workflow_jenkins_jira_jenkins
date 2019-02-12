@@ -110,14 +110,18 @@ pipeline {
                                     {
                                         println("---------------${count}--------------------")
                                         def link = link_res_json.fields.issuelinks[count]
-                                        println(' outwardIssue link  type  :'+link.type.name)
+                                        
                                         def issue_link_name =link.type.name
-                                        println(' status of outwardIssue :'+link.outwardIssue.fields.status.name)
+                                        println(' outwardIssue link  type  :'+issue_link_name)
                                         def issue_status = link.outwardIssue.fields.status.name
-                                        println(' type of outwardIssue :'+link.outwardIssue.fields.issuetype.name)
+                                        println(' status of outwardIssue :'+issue_status)
                                         def issue_type = link.outwardIssue.fields.issuetype.name
-                                        println(' link outwardIssue issue key :'+link.outwardIssue.key)
+                                        println(' type of outwardIssue :'+issue_type)
                                         def issue_key = link.outwardIssue.key
+                                        println(' link outwardIssue issue key :'+issue_key)
+                                        println('PARENT_ISSUE_TYPE '+PARENT_ISSUE_TYPE)
+                                        println('PARENT_ISSUE_RELATE '+PARENT_ISSUE_RELATE)
+                                        println('PARENT_ISSUE_STATUS '+PARENT_ISSUE_STATUS)
                                         if(PARENT_ISSUE_TYPE == issue_type && PARENT_ISSUE_RELATE == issue_link_name && PARENT_ISSUE_STATUS == issue_status)
                                         {
                                             println ( "met all conditions ")

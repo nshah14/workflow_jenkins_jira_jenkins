@@ -98,8 +98,8 @@ pipeline {
                                 println('Status: '+res.status)
                                 println('Response: '+res.content)
                                 println('jira status :'+res)
-                                def data = new JsonSlurperClassic().parseText(res.content)
-                                echo "color: ${data}"
+                                def myObject = readJSON text: res.content
+                                echo "data"+myObject
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

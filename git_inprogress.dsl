@@ -85,7 +85,8 @@ pipeline {
                             echo "issue array size  is "+links.size()
                             for (i = 0; i <links.size(); i++) {  
                                 echo "link issue "+links[i].key
-                                echo "current status of the issue "+links[i].getStatusObject().getName()
+                                echo "current status of the issue "+links[i]
+                                echo "****************************************************************************"
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

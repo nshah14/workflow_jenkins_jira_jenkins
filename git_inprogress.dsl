@@ -94,8 +94,8 @@ pipeline {
                                 // def response = sh 'curl -D- -u *****:**** -X GET -H "Content-Type: application/json" http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status'
                                 //http://localhost:8080/rest/api/2/issue/
                                 def res = httpRequest authentication: 'credentialsJira', url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
-                                println('Status: '+response.status)
-                                println('Response: '+response.content)
+                                println('Status: '+res.status)
+                                println('Response: '+res.content)
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
                                 
                             }

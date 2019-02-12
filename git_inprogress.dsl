@@ -80,6 +80,7 @@ pipeline {
                     try{
                         if(NOCHANGE_STATUS=="FALSE")
                         {
+                        
                             def linked_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY})",site: "${SITE}"
                             def links = linked_issues.data.issues
                             echo "issue array size  is "+links.size()
@@ -88,7 +89,8 @@ pipeline {
                                 echo "current status of the issue "+links[i]
                                 echo "****************************************************************************"
                                 ///
-                                def response = httpRequest "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                //var urlissue = "http://"+config.user+":"+config.password+"@"+config.host+":"+config.port+config.url+"issue/"+queryBy;
+                                def response = httpRequest "http://nshah:admin123@62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
                                 println('Status: '+response.status)
                                 println('Response: '+response.content)
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)

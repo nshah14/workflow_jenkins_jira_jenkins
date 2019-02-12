@@ -63,7 +63,7 @@ pipeline {
                 }
                 catch(error){
                    
-                    rollback(JIRA_ISSUE_KEY)
+                    validate.rollback(JIRA_ISSUE_KEY, IN_PROGRESS_KEY, SITE, PROJECT, TO_DO_ID)
                     throw Exception
                 }
 

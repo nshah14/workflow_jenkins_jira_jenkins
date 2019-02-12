@@ -19,9 +19,9 @@ node {
     IN_PROGRESS_KEY=props['IN_PROGRESS_KEY']
     TO_DO_KEY=props['TO_DO_KEY']
     credential='credentialsJira'
-    PARENT_ISSUE_TYPE=['PARENT_ISSUE_TYPE']
-    PARENT_ISSUE_RELATE=['PARENT_ISSUE_RELATE']
-    PARENT_ISSUE_STATUS=['PARENT_ISSUE_STATUS']    
+    PARENT_ISSUE_TYPE=props['PARENT_ISSUE_TYPE']
+    PARENT_ISSUE_RELATE=props['PARENT_ISSUE_RELATE']
+    PARENT_ISSUE_STATUS=props['PARENT_ISSUE_STATUS']    
 }
 pipeline {
    agent { label 'build' }

@@ -22,6 +22,8 @@ node {
     PARENT_ISSUE_TYPE=props['PARENT_ISSUE_TYPE']
     PARENT_ISSUE_RELATE=props['PARENT_ISSUE_RELATE']
     PARENT_ISSUE_STATUS=props['PARENT_ISSUE_STATUS']    
+    JIRA_BASE_URL=props['JIRA_BASE_URL']
+    JIRA_REST_EXT=props['JIRA_REST_EXT']
 }
 pipeline {
    agent { label 'build' }

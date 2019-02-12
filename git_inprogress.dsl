@@ -90,7 +90,10 @@ pipeline {
                                 echo "****************************************************************************"
                                 ///
                                 //var urlissue = "http://"+config.user+":"+config.password+"@"+config.host+":"+config.port+config.url+"issue/"+queryBy;
-                                def response = httpRequest "http://nshah:admin123@62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                //bnNoYWgxNDphZG1pbjEyMw== 
+                                sh 'curl -D- -u nshah14:admin123 -X POST --data {see below} -H "Content-Type: application/json" http://62.60.42.37:8080/rest/api/2/issue'
+                                //http://localhost:8080/rest/api/2/issue/
+                                def response = httpRequest "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
                                 println('Status: '+response.status)
                                 println('Response: '+response.content)
                                 validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)

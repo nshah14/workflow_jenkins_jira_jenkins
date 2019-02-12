@@ -18,6 +18,7 @@ node {
     SITE=props['SITE']
     IN_PROGRESS_KEY=props['IN_PROGRESS_KEY']
     TO_DO_KEY=props['TO_DO_KEY']
+    credential='credentialsJira'
 }
 pipeline {
    agent { label 'build' }
@@ -89,18 +90,20 @@ pipeline {
                                 echo "link issue "+links[i].key
                                 echo "current status of the issue "+links[i]
                                 echo "****************************************************************************"
-                                ///
-                                //var urlissue = "http://"+config.user+":"+config.password+"@"+config.host+":"+config.port+config.url+"issue/"+queryBy;
-                                //bnNoYWgxNDphZG1pbjEyMw== 
-                                // def response = sh 'curl -D- -u *****:**** -X GET -H "Content-Type: application/json" http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status'
-                                //http://localhost:8080/rest/api/2/issue/
-                                def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
-                                println('Status: '+res.status)
-                                println('Response: '+res.content)
-                                println('jira status :'+res)
-                                def myObject = readJSON text: res.content
-                                echo "data"+myObject.fields.status.name
-                                validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
+                                // def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                // println('Status: '+res.status)
+                                // println('Response: '+res.content)
+                                // println('jira status :'+res)
+                                // def myObject = readJSON text: res.content
+                                // echo "data"+myObject.fields.status.name
+                                if(checkStatusif(TO_DO_KEY, "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status", credential))
+                                {
+                                    validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
+                                }
+                                else
+                                {
+                                    echo "parent is already moved in "
+                                }
                                 
                             }
                         }

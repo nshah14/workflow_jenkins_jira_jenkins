@@ -21,4 +21,25 @@
     {
         echo 'Its printing'
     }
+
+    def checkStatus(exp_status, jira_url, credential)
+    {
+            // def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+            def res = httpRequest authentication: credential, contentType : "APPLICATION_JSON", url: jira_url
+            println('Status: '+res.status)
+            println('Response: '+res.content)
+            println('jira status :'+res)
+            def json = readJSON text: res.content
+            echo "data"+json.fields.status.name
+            if(exp_status == json.fields.status.name )
+            {
+                return true
+            }
+            else
+            {
+                return false
+
+            }
+    }
+
 return this

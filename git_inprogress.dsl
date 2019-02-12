@@ -93,7 +93,7 @@ pipeline {
                                 //bnNoYWgxNDphZG1pbjEyMw== 
                                 // def response = sh 'curl -D- -u *****:**** -X GET -H "Content-Type: application/json" http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status'
                                 //http://localhost:8080/rest/api/2/issue/
-                                def res = httpRequest authentication: 'credentialsJira', url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
                                 println('Status: '+res.status)
                                 println('Response: '+res.content)
                                 println('jira status :'+res.content.fields.status.name)

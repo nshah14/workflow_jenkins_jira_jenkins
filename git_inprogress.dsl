@@ -110,6 +110,7 @@ pipeline {
                                         println(' outwardIssue link  type  :'+link.type.name)
                                         println(' link outwardIssue issue key :'+link.outwardIssue.key)
                                         println(' status of outwardIssue :'+link.outwardIssue.fields.status.name)
+                                        println(' type of outwardIssue :'+link.outwardIssue.fields.issuetype.name)
                                     }
                                     
                                 }

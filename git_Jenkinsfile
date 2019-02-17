@@ -17,6 +17,13 @@ node {
     IN_PROGRESS_KEY=props['IN_PROGRESS_KEY']
     DEVELOPMENT_COMPLETE_KEY=props['DEVELOPMENT_COMPLETE_KEY']
     TO_DO_KEY=props['TO_DO_KEY']
+    credential='credentialsJira'
+    PARENT_ISSUE_TYPE=props['PARENT_ISSUE_TYPE']
+    PARENT_ISSUE_RELATE=props['PARENT_ISSUE_RELATE']
+    PARENT_ISSUE_STATUS=props['PARENT_ISSUE_STATUS']    
+    JIRA_BASE_URL=props['JIRA_BASE_URL']
+    JIRA_REST_EXT=props['JIRA_REST_EXT']
+    ISSUE_TYPE_EPIC= props['ISSUE_TYPE_EPIC']
 }
 
 pipeline {
@@ -181,55 +188,126 @@ pipeline {
             }
         }
     }
-    stage('Jira Update To Development Complete'){
+
+     stage('Jira Update To Development Complete')
+     {
     
             steps{
                 script{
                     try{
                         if(NOCHANGE_STATUS=="FALSE")
                         {
+                        
                             def linked_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY})",site: "${SITE}"
                             def links = linked_issues.data.issues
                             echo "issue array size  is "+links.size()
                             for (i = 0; i <links.size(); i++) {  
                                 echo "link issue "+links[i].key
-                                def linked_childern_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${links[i].key})",site: "${SITE}"
-                                def childern_links = linked_childern_issues.data.issues
-                                for (j = 0; j < childern_links.size(); j++)
+                                echo "current status of the issue "+links[i]
+                                echo "****************************************************************************"
+                                // def res = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "http://62.60.42.37:8080/rest/api/2/issue/PS-2?fields=status"
+                                // println('Status: '+res.status)
+                                // println('Response: '+res.content)
+                                // println('jira status :'+res)
+                                // def myObject = readJSON text: res.content
+                                // echo "data"+myObject.fields.status.name
+                                if(validate.checkStatus(TO_DO_KEY, "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${links[i].key}?fields=status", credential))
                                 {
-                                    echo "issue which is being checked "+childern_links[j].key
-                                    def check_child_issue_status = jiraJqlSearch jql:"project = ${PROJECT} AND issue = ${childern_links[j].key} AND status = '${DEVELOPMENT_COMPLETE_KEY}'",site: "${SITE}"
-                                    def list_check_child_issue_status = check_child_issue_status.data.issues
-                                    echo " size of the array which has rollback issue"+list_check_child_issue_status.size()
-                                    if(list_check_child_issue_status.size()  > 0  )
+                                    validate.setTransitions(IN_PROGRESS_ID, links[i].key, SITE)
+                                    //check linked issues
+                                    
+                                    def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${links[i].key}?fields=issuelinks"
+                                    def link_res_json = readJSON text: link_issue_response.content
+                                    for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)
                                     {
-                                        echo "issue is moved"
-                                        NOCHANGE_STATUS = "FALSE"
+                                        println("---------------${count}--------------------")
+                                        def link = link_res_json.fields.issuelinks[count]
+                                        
+                                        def issue_link_name =link.type.name
+                                        println(' outwardIssue link  type  :'+issue_link_name)
+                                        def issue_status = link.outwardIssue.fields.status.name
+                                        println(' status of outwardIssue :'+issue_status)
+                                        def issue_type = link.outwardIssue.fields.issuetype.name
+                                        println(' type of outwardIssue :'+issue_type)
+                                        def issue_key = link.outwardIssue.key
+                                        println(' link outwardIssue issue key :'+issue_key)
+                                        println('PARENT_ISSUE_TYPE '+PARENT_ISSUE_TYPE)
+                                        println('PARENT_ISSUE_RELATE '+PARENT_ISSUE_RELATE)
+                                        println('PARENT_ISSUE_STATUS '+PARENT_ISSUE_STATUS)
+                                        if(ISSUE_TYPE_EPIC == issue_type && PARENT_ISSUE_RELATE == issue_link_name && PARENT_ISSUE_STATUS_DEV_COMP == issue_status)
+                                        {
+                                            println ( "met all conditions ")
+                                            validate.setTransitions(DEVELOPMENT_COMPLETE, issue_key, SITE)
+                                            break;
+                                        }
                                     }
-                                    else
-                                    {
-                                       echo "childern is still in In Progress state so cant move parent now"
-                                       NOCHANGE_STATUS = "TRUE"
-                                       break;
-                                    }
-                                   
+                                    
                                 }
-                                if(NOCHANGE_STATUS=="FALSE")
+                                else
                                 {
-                                    echo "status update for issue ${links[i].key}"
-                                    validate.setTransitions(DEVELOPMENT_COMPLETE_ID, links[i].key, SITE)
+                                    echo "parent is already moved in "
                                 }
                                 
                             }
                         }
                     }
                     catch(error){
-                       validate.rollback(JIRA_ISSUE_KEY, DEVELOPMENT_COMPLETE_KEY, SITE, PROJECT, IN_PROGRESS_ID)
+                     
+                        validate.rollback(JIRA_ISSUE_KEY, IN_PROGRESS_KEY, SITE, PROJECT, TO_DO_ID)
                         throw Exception
                     }
                 }
              }
          }
+    // stage('Jira Update To Development Complete'){
+    
+    //         steps{
+    //             script{
+    //                 try{
+    //                     if(NOCHANGE_STATUS=="FALSE")
+    //                     {
+    //                         def linked_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${JIRA_ISSUE_KEY})",site: "${SITE}"
+    //                         def links = linked_issues.data.issues
+    //                         echo "issue array size  is "+links.size()
+    //                         for (i = 0; i <links.size(); i++) {  
+    //                             echo "link issue "+links[i].key
+    //                             def linked_childern_issues = jiraJqlSearch jql:"project = ${PROJECT} AND issue in linkedIssues(${links[i].key})",site: "${SITE}"
+    //                             def childern_links = linked_childern_issues.data.issues
+    //                             for (j = 0; j < childern_links.size(); j++)
+    //                             {
+    //                                 echo "issue which is being checked "+childern_links[j].key
+    //                                 def check_child_issue_status = jiraJqlSearch jql:"project = ${PROJECT} AND issue = ${childern_links[j].key} AND status = '${DEVELOPMENT_COMPLETE_KEY}'",site: "${SITE}"
+    //                                 def list_check_child_issue_status = check_child_issue_status.data.issues
+    //                                 echo " size of the array which has rollback issue"+list_check_child_issue_status.size()
+    //                                 if(list_check_child_issue_status.size()  > 0  )
+    //                                 {
+    //                                     echo "issue is moved"
+    //                                     NOCHANGE_STATUS = "FALSE"
+    //                                 }
+    //                                 else
+    //                                 {
+    //                                    echo "childern is still in In Progress state so cant move parent now"
+    //                                    NOCHANGE_STATUS = "TRUE"
+    //                                    break;
+    //                                 }
+                                   
+    //                             }
+    //                             if(NOCHANGE_STATUS=="FALSE")
+    //                             {
+    //                                 echo "status update for issue ${links[i].key}"
+    //                                 validate.setTransitions(DEVELOPMENT_COMPLETE_ID, links[i].key, SITE)
+    //                             }
+                                
+    //                         }
+    //                     }
+    //                 }
+    //                 catch(error){
+    //                    validate.rollback(JIRA_ISSUE_KEY, DEVELOPMENT_COMPLETE_KEY, SITE, PROJECT, IN_PROGRESS_ID)
+    //                     throw Exception
+    //                 }
+    //             }
+    //          }
+    //      }
     }
 }
 

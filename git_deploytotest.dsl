@@ -12,6 +12,16 @@ node {
     SITE=props['SITE']
     IN_PROGRESS_KEY=props['IN_PROGRESS_KEY']
     TO_DO_KEY=props['TO_DO_KEY']
+    ISSUE_TYPE_TASK=props['ISSUE_TYPE_TASK']
+     credential='credentialsJira'
+    PARENT_ISSUE_TYPE=props['PARENT_ISSUE_TYPE']
+    PARENT_ISSUE_RELATE=props['PARENT_ISSUE_RELATE']
+    PARENT_ISSUE_STATUS=props['PARENT_ISSUE_STATUS']    
+    JIRA_BASE_URL=props['JIRA_BASE_URL']
+    JIRA_REST_EXT=props['JIRA_REST_EXT']
+    ISSUE_TYPE_EPIC= props['ISSUE_TYPE_EPIC']
+    PARENT_ISSUE_STATUS_DEV_COMP=props['PARENT_ISSUE_STATUS_DEV_COMP']
+    PARENT_ISSUE_STATUS_IN_PRO=props['PARENT_ISSUE_STATUS_IN_PRO']
 }
 pipeline {
    agent any
@@ -106,12 +116,31 @@ pipeline {
                     echo "link issue "+links[i].key
                     def key = links[i].key
                     setTransitions(DEPLOY_TO_TEST_ID, key)
-                    /*
-                    def transitions = jiraGetIssueTransitions idOrKey: key, site: "${SITE}"
-                    echo "data ::::: " +transitions.data.toString()
-                    def transitionInput = [ transition: [ id: '31'] ]
-                    jiraTransitionIssue idOrKey: key, input: transitionInput, site: 'JIRA'
-                    */
+                    def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=issuelinks"
+                    def link_res_json = readJSON text: link_issue_response.content
+                    for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)
+                    {
+                        println("---------------${count}--------------------")
+                        def link = link_res_json.fields.issuelinks[count]
+                        
+                        def issue_link_name =link.type.name
+                        println(' outwardIssue link  type  :'+issue_link_name)
+                        def issue_status = link.outwardIssue.fields.status.name
+                        println(' status of outwardIssue :'+issue_status)
+                        def issue_type = link.outwardIssue.fields.issuetype.name
+                        println(' type of outwardIssue :'+issue_type)
+                        def issue_key = link.outwardIssue.key
+                        println(' link outwardIssue issue key :'+issue_key)
+                        println('PARENT_ISSUE_TYPE '+PARENT_ISSUE_TYPE)
+                        println('PARENT_ISSUE_RELATE '+PARENT_ISSUE_RELATE)
+                        println('PARENT_ISSUE_STATUS '+PARENT_ISSUE_STATUS)
+                        if(ISSUE_TYPE_TASK == issue_type )
+                        {
+                            println ( "met all conditions ")
+                            validate.setTransitions(DEPLOY_TO_TEST_ID, issue_key, SITE)
+                            break;
+                        }
+                    }
                 }
                
             }

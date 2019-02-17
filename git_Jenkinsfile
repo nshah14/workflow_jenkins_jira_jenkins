@@ -238,6 +238,7 @@ pipeline {
                                         println('PARENT_ISSUE_STATUS '+PARENT_ISSUE_STATUS_IN_PRO)
                                         if(ISSUE_TYPE_EPIC == issue_type && PARENT_ISSUE_RELATE == issue_link_name && PARENT_ISSUE_STATUS_IN_PRO == issue_status)
                                         {
+                                            println("check childern of EPIC if any is in In Progress Status")
                                             println ( "met all conditions ")
                                             validate.setTransitions(DEVELOPMENT_COMPLETE_ID, issue_key, SITE)
                                             break;

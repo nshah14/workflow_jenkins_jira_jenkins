@@ -116,6 +116,17 @@ pipeline {
                     echo "link issue "+links[i].key
                     def key = links[i].key
                     setTransitions(DEPLOY_TO_TEST_ID, key)
+                    // http://62.60.42.37:8080/rest/api/2/issue/PS-5?fields=customfield_10306
+                    // http://62.60.42.37:8080/rest/api/2/issue/PS-5?fields=customfield_10305
+                    // Check field version
+
+                    def link_issue_artifact_version = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=customfield_10306"
+                    def link_issue_artifact_name = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=customfield_10305"
+                    def link_issue_artifact_version_json = readJSON text: link_issue_artifact_version.content
+                    def link_issue_artifact_name_json = readJSON text: link_issue_artifact_name.content
+                    println(' artifact name :: '+link_issue_artifact_name_json.fields.customfield_10305)
+                    println(' artifact version :: '+link_issue_artifact_version_json.fields.customfield_10306)
+
                     def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=issuelinks"
                     def link_res_json = readJSON text: link_issue_response.content
                     for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)

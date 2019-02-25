@@ -114,8 +114,12 @@ pipeline {
                 def links = linked_issues.data.issues
                 echo "links "+linked_issues.data.issues
                 def write_json = validate.createJson("poa-bal", "21.2")
-                writeJSON file: 'output.json', json: write_json, pretty: 4
-                zip zipFile: 'output_version'
+                // writeJSON file: 'output.json', json: write_json, pretty: 4
+                json "release": write_json
+                def file = new File("$WORKSPACE/release.json")
+                file.write(groovy.json.JsonOutput.prettyPrint(json.toString()))
+
+                // zip zipFile: 'output_version's
                 echo "issue array size  is "+links.size()
                 for (i = 0; i <links.size(); i++) {  
                     echo "link issue "+links[i].key

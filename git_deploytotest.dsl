@@ -121,7 +121,8 @@ pipeline {
 
                 def data = readJSON text: '{}'
                 data.release = "${write_json}" as String
-                writeJSON(file: 'release.json', json: data)
+                println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+data.release)
+                writeJSON(file: 'release.json', json: data.release)
                 
 
                 // zip zipFile: 'output_version's

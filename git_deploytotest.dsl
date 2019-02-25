@@ -127,6 +127,8 @@ pipeline {
 
                 zip(zipFile: 'release.zip', glob:'*.json')
                 echo "issue array size  is "+links.size()
+                def parentMap=[:]
+                def lst = []
                 for (i = 0; i <links.size(); i++) {  
                     echo "link issue "+links[i].key
                     def key = links[i].key
@@ -141,7 +143,10 @@ pipeline {
                     def link_issue_artifact_name_json = readJSON text: link_issue_artifact_name.content
                     println(' artifact name :: '+link_issue_artifact_name_json.fields.customfield_10305)
                     println(' artifact version :: '+link_issue_artifact_version_json.fields.customfield_10306)
-
+                    def map = [:]
+                    map["artifact_name"]=[ link_issue_artifact_name_json.fields.customfield_10305]
+                    map["artifact_version"]= [link_issue_artifact_name_json.fields.customfield_10306]
+                    lst << map
                     def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=issuelinks"
                     def link_res_json = readJSON text: link_issue_response.content
                     for(count = 0; count < link_res_json.fields.issuelinks.size(); count++)
@@ -168,6 +173,8 @@ pipeline {
                         }
                     }
                 }
+                parentMap["artifacts"]=lst
+                println("parent Map  >>>>> "+parentMap)
                
             }
         }

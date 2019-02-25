@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonBuilder
-import groovy.json.JsonSlurper
+import groovy.json.*
 import groovy.json.JsonOutput
 import net.sf.json.JSONObject;
 def validate

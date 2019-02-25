@@ -174,7 +174,8 @@ pipeline {
     }
 
     stage('Publish release json') {
-         nexusVersion: 'nexus3',
+        nexusArtifactUploader(
+        nexusVersion: 'nexus3',
         protocol: 'http',
         nexusUrl: '62.60.42.82:8081',
         groupId: 'com.fujitsu.fs.poa.bal',
@@ -186,7 +187,8 @@ pipeline {
             classifier: '',
             file: 'release' + version + '.zip',
             type: 'zip']
-    ]
+        ]
+        )
     }
        stage("Mail"){
             steps{

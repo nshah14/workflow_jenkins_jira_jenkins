@@ -1,3 +1,4 @@
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
     def setTransitions(transId, key, site)
     {

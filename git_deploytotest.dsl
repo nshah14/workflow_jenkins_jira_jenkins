@@ -189,8 +189,8 @@ pipeline {
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
                
                 def slurped = new JsonSlurper().parseText(json.toPrettyString())
-                def data = readJSON text: slurped
-                writeJSON(file: 'release.json', json: data)
+                // def data = readJSON text: slurped
+                writeJSON(file: 'release.json', json: new JSONObject.fromObject(parentMap))
                 // new File("$WORKSPACE/release.json").write( json.toPrettyString())
                 zip(zipFile: 'release.zip', glob:'*.json')
             }

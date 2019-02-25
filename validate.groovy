@@ -44,7 +44,7 @@ import groovy.json.JsonSlurper
 
     def createJson(name, value ){
         def jsonSlurper = new JsonSlurper()
-        def object = jsonSlurper.parseText('{ "name": '+value'} } ')
+        def object = jsonSlurper.parseText('{ "name": "'${value}'"} } ')
         println('Object '+object)
     }
 

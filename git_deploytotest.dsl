@@ -173,6 +173,8 @@ pipeline {
                         }
                     }
                 }
+                parentMap["name"] = "poa-bal"
+                parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
                

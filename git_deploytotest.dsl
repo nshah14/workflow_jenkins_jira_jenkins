@@ -1,4 +1,8 @@
 #!/usr/bin/env groovy
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
 def validate
 node {
     checkout scm
@@ -177,6 +181,12 @@ pipeline {
                 parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
+                def json = new groovy.json.JsonBuilder()
+
+                json rootKey: parentMap
+
+                println "json output: "
+                println groovy.json.JsonOutput.prettyPrint(json.toString())
                
             }
         }

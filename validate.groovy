@@ -1,4 +1,4 @@
-
+import groovy.json.JsonSlurper
     def setTransitions(transId, key, site)
     {
         echo 'Set transition to allocated status'
@@ -40,6 +40,12 @@
                 return false
 
             }
+    }
+
+    def createJson(name, value ){
+        def jsonSlurper = new JsonSlurper()
+        def object = jsonSlurper.parseText('{ "name": value } ')
+        println('Object '+object)
     }
 
 return this

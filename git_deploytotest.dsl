@@ -113,7 +113,7 @@ pipeline {
                 echo "issues "+linked_issues
                 def links = linked_issues.data.issues
                 echo "links "+linked_issues.data.issues
-                
+                validate.createJson("artifact", "poa-bal")
                 echo "issue array size  is "+links.size()
                 for (i = 0; i <links.size(); i++) {  
                     echo "link issue "+links[i].key

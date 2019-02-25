@@ -47,8 +47,8 @@ import groovy.json.JsonSlurper
         def jsonSlurper = new JsonSlurper()
         def slurpe_object = jsonSlurper.parseText("""{ 
 
-        "release": "poa-bal",
-        "version": ${value},
+        "release": "${name}",
+        "version": "${value}",
         "artifacts":
         [
             {

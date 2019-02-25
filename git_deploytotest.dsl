@@ -113,7 +113,7 @@ pipeline {
                 echo "issues "+linked_issues
                 def links = linked_issues.data.issues
                 echo "links "+linked_issues.data.issues
-                def write_json = validate.createJson("artifact", "poa-bal")
+                def write_json = validate.createJson("poa-bal", "21.2")
                 writeJSON file: 'output.json', json: write_json, pretty: 4
                 zip zipFile: 'output_version'
                 echo "issue array size  is "+links.size()

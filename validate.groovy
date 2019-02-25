@@ -49,16 +49,16 @@ import groovy.json.JsonSlurper
         "artifacts":
         [
             {
-                "artifact_name": "abcd",
-                "artifact_version": 12.2
+                "artifact_name": "rest",
+                "artifact_version": 1.0
             },
             {
-                "artifact_name": "xyz",
-                "artifact_version": 12.2
+                "artifact_name": "database",
+                "artifact_version": 0.2
             },
             {
-                "artifact_name": "efgh",
-                "artifact_version": 12.2
+                "artifact_name": "middleware",
+                "artifact_version": 6.5
             }
         ]
 

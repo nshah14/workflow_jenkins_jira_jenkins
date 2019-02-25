@@ -113,7 +113,7 @@ pipeline {
                 echo "issues "+linked_issues
                 def links = linked_issues.data.issues
                 echo "links "+linked_issues.data.issues
-                def write_json = validate.generateJson("poa-bal", "21.2")
+                def write_json = validate.generateJson("poa-bal", "10.1")
                 // writeJSON file: 'output.json', json: write_json, pretty: 4
                 // json "release": write_json
                 // def file = new File("$WORKSPACE/release.json")
@@ -180,7 +180,7 @@ pipeline {
                 protocol: 'http',
                 nexusUrl: '62.60.42.82:8081',
                 groupId: 'com.fujitsu.fs.poa.bal',
-                version: '21.1',
+                version: '10.1',
                 repository: 'maven-releases',
                 credentialsId: 'nexus_cred',
                 artifacts: [

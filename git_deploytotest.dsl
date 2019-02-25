@@ -113,14 +113,14 @@ pipeline {
                 echo "issues "+linked_issues
                 def links = linked_issues.data.issues
                 echo "links "+linked_issues.data.issues
-                def write_json = validate.createJson("poa-bal", "21.2")
+                def write_json = validate.generateJson("poa-bal", "21.2")
                 // writeJSON file: 'output.json', json: write_json, pretty: 4
                 // json "release": write_json
                 // def file = new File("$WORKSPACE/release.json")
                 // file.write(groovy.json.JsonOutput.prettyPrint(json.toString()))
 
                 def data = readJSON text: '{}'
-                data.release = write_json
+                data.release = "release: ${write_json}" as String
                 writeJSON(file: 'release.json', json: data, pretty: 4)
                 
 

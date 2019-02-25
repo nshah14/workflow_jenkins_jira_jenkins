@@ -42,6 +42,29 @@ import groovy.json.JsonSlurper
 
             }
     }
+    def generateJson(name. value){
+        def json_string = """{ 
+
+        "release": "${name}",
+        "version": "${value}",
+        "artifacts":
+        [
+            {
+                "artifact_name": "abcd",
+                "artifact_version": 12.2
+            },
+            {
+                "artifact_name": "xyz",
+                "artifact_version": 12.2
+            },
+            {
+                "artifact_name": "efgh",
+                "artifact_version": 12.2
+            }
+        ]
+
+            } """
+    }
 
     def createJson(name, value ){
         def jsonSlurper = new JsonSlurper()

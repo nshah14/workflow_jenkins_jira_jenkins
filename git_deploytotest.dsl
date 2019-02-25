@@ -2,6 +2,8 @@
 def validate
 node {
     checkout scm
+    def rootDir = pwd()
+    println("Current Directory: " + rootDir)
     props = readProperties file:'dev.txt'
      validate = load "${rootDir}/validate.groovy"  
     NOCHANGE_STATUS=props['NOCHANGE_STATUS']

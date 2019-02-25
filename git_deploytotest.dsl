@@ -125,7 +125,7 @@ pipeline {
                 writeJSON(file: 'release.json', json: data)
                 
 
-                zip(zipFile: 'release.zip', glob:'json')
+                zip(zipFile: 'release.zip', glob:'*.json')
                 echo "issue array size  is "+links.size()
                 for (i = 0; i <links.size(); i++) {  
                     echo "link issue "+links[i].key

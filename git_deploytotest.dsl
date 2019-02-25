@@ -181,7 +181,7 @@ pipeline {
                 nexusUrl: '62.60.42.82:8081',
                 groupId: 'com.fujitsu.fs.poa.bal',
                 version: '21.1',
-                repository: 'maven-release',
+                repository: 'maven-releases',
                 credentialsId: 'nexus_cred',
                 artifacts: [
                     [artifactId: 'poa-bal-json',

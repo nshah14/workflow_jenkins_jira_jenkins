@@ -44,10 +44,10 @@ import groovy.json.JsonSlurper
 
     def createJson(name, value ){
         def jsonSlurper = new JsonSlurper()
-        def object = jsonSlurper.parseText('''{ 
+        def slurpe_object = jsonSlurper.parseText("""{ 
 
         "release": "poa-bal",
-        "version": "18.2",
+        "version": ${value},
         "artifacts":
         [
             {
@@ -64,9 +64,11 @@ import groovy.json.JsonSlurper
             }
         ]
 
-            } ''')
-        println('Object '+object)
-        return object
+            } """)
+        println('Object '+slurpe_object)
+        def builder = new JsonBuilder(slurpe_object)
+         println('*********************************builder***************************************'+builder)
+        return builder
     }
 
 return this

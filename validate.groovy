@@ -43,8 +43,7 @@ import groovy.json.JsonSlurper
             }
     }
     def generateJson(name, value){
-        def json_string = """{ 
-
+        def json_string = """{
         "name": "${name}",
         "version": "${value}",
         "artifacts":

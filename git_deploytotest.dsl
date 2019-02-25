@@ -183,10 +183,10 @@ pipeline {
                 println("parent Map  >>>>> "+parentMap)
                 def json = new groovy.json.JsonBuilder()
                 json rootKey: parentMap
-                JSONObject JSO = JSONObject.fromObject(json.toString());
+                // JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
-                writeJSON(file: 'release.json', json: JSO)
+                writeJSON(file: 'release.json', json: json.toPrettyString)
                 zip(zipFile: 'release.zip', glob:'*.json')
             }
         }

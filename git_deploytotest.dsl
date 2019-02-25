@@ -186,7 +186,7 @@ pipeline {
                 artifacts: [
                     [artifactId: 'poa-bal-json',
                     classifier: '',
-                    file: 'release' + version + '.zip',
+                    file: 'release.zip',
                     type: 'zip']
                 ]
             )

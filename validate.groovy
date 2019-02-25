@@ -64,6 +64,7 @@ import groovy.json.JsonSlurper
         ]
 
             } """
+        return json_string
     }
 
     def createJson(name, value ){

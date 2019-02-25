@@ -187,13 +187,15 @@ pipeline {
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
-               
-                def slurped = new JsonSlurper().parseText(json.toPrettyString())
+                 new File("$WORKSPACE/release.json").write(json.toPrettyString())
+
+                // def slurped = new JsonSlurper().parseText(json.toPrettyString())
                 // def data = readJSON text: slurped
-                def j = new JSONObject.fromObject(parentMap)
-                writeJSON(file: 'release.json', json: j)
+                // writeJSON(file: 'release.json', json: data)
                 // new File("$WORKSPACE/release.json").write( json.toPrettyString())
+                
                 zip(zipFile: 'release.zip', glob:'*.json')
+                println("done creating file")
             }
         }
     }

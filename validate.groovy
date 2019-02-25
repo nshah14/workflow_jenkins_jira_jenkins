@@ -42,7 +42,7 @@ import groovy.json.JsonSlurper
 
             }
     }
-    def generateJson(name. value){
+    def generateJson(name, value){
         def json_string = """{ 
 
         "release": "${name}",

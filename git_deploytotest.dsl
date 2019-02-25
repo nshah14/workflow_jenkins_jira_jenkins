@@ -184,7 +184,7 @@ pipeline {
                 repository: 'maven-release',
                 credentialsId: 'nexus_cred',
                 artifacts: [
-                    [artifactId: poa-bal-json,
+                    [artifactId: 'poa-bal-json',
                     classifier: '',
                     file: 'release' + version + '.zip',
                     type: 'zip']

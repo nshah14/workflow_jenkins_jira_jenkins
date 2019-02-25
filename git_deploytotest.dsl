@@ -120,8 +120,7 @@ pipeline {
                 // file.write(groovy.json.JsonOutput.prettyPrint(json.toString()))
 
                 def data = readJSON text: '{}'
-                data.release = "${write_json}" 
-                //as String
+                data.release = "release: ${write_json}" as String
                 writeJSON(file: 'release.json', json: data, pretty: 4)
                 
 

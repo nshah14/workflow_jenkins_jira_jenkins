@@ -187,7 +187,7 @@ pipeline {
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
-                new File(build.workspace.toString() + "\\release.json").write(json.toPrettyString())
+                new File("$WORKSPACE/release.json").write(json.toPrettyString())
                 zip(zipFile: 'release.zip', glob:'*.json')
             }
         }

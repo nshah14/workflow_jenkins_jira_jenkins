@@ -2,7 +2,7 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
-
+import net.sf.json.JSONObject;
 def validate
 node {
     checkout scm
@@ -182,12 +182,11 @@ pipeline {
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
                 def json = new groovy.json.JsonBuilder()
-
                 json rootKey: parentMap
-
+                JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
-                writeJSON(file: 'release.json', json: json.toString())
+                writeJSON(file: 'release.json', json: JSO)
                 zip(zipFile: 'release.zip', glob:'*.json')
             }
         }

@@ -1,8 +1,9 @@
 #!/usr/bin/env groovy
-
+def validate
 node {
     checkout scm
     props = readProperties file:'dev.txt'
+     validate = load "${rootDir}/validate.groovy"  
     NOCHANGE_STATUS=props['NOCHANGE_STATUS']
     IN_PROGRESS_ID=props['IN_PROGRESS_ID']
     TO_DO_ID=props['TO_DO_ID']

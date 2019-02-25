@@ -44,26 +44,27 @@ import groovy.json.JsonSlurper
 
     def createJson(name, value ){
         def jsonSlurper = new JsonSlurper()
-        def object = jsonSlurper.parseText('{
-                release: "poa-bal",
-                version: "18.2",
-                artifacts:
-                [
-                    {
-                        artifact_name: "abcd",
-                        artifact_version: 12.2
-                    },
-                    {
-                        artifact_name: "xyz",
-                        artifact_version: 12.2
-                    },
-                    {
-                        artifact_name: "efgh",
-                        artifact_version: 12.2
-                    }
-                ]
+        def object = jsonSlurper.parseText('{ 
 
-            }')
+    "release": "poa-bal",
+    "version": "18.2",
+    "artifacts":
+    [
+        {
+            "artifact_name": "abcd",
+            "artifact_version": 12.2
+        },
+        {
+            "artifact_name": "xyz",
+            "artifact_version": 12.2
+        },
+        {
+            "artifact_name": "efgh",
+            "artifact_version": 12.2
+        }
+    ]
+
+        } ')
         println('Object '+object)
     }
 

@@ -69,7 +69,7 @@ import groovy.json.JsonSlurper
         println('Object '+slurpe_object)
         def builder = new JsonBuilder(slurpe_object)
          println('*********************************builder***************************************'+builder)
-        return builder
+        return slurpe_object
     }
 
 return this

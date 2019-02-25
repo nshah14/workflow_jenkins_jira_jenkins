@@ -145,7 +145,7 @@ pipeline {
                     println(' artifact version :: '+link_issue_artifact_version_json.fields.customfield_10306)
                     def map = [:]
                     map["artifact_name"]=[ link_issue_artifact_name_json.fields.customfield_10305]
-                    map["artifact_version"]= [link_issue_artifact_name_json.fields.customfield_10306]
+                    map["artifact_version"]= [link_issue_artifact_version_json.fields.customfield_10306]
                     lst << map
                     def link_issue_response = httpRequest authentication: 'credentialsJira', contentType : "APPLICATION_JSON", url: "${JIRA_BASE_URL}${JIRA_REST_EXT}issue/${key}?fields=issuelinks"
                     def link_res_json = readJSON text: link_issue_response.content

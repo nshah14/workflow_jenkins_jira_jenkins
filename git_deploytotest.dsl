@@ -123,13 +123,13 @@ pipeline {
                 // def file = new File("$WORKSPACE/release.json")
                 // file.write(groovy.json.JsonOutput.prettyPrint(json.toString()))
 
-                def data = readJSON text: '{}'
-                data.release = "${write_json}" as String
-                println("----------------------------------------------------------------------------------------------"+data)
-                writeJSON(file: 'release.json', json: data)
+                // def data = readJSON text: '{}'
+                // data.release = "${write_json}" as String
+                // println("----------------------------------------------------------------------------------------------"+data)
+                // writeJSON(file: 'release.json', json: data)
                 
 
-                zip(zipFile: 'release.zip', glob:'*.json')
+                // zip(zipFile: 'release.zip', glob:'*.json')
                 echo "issue array size  is "+links.size()
                 def parentMap=[:]
                 def lst = []
@@ -187,6 +187,8 @@ pipeline {
 
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
+                writeJSON(file: 'release.json', json: json)
+                zip(zipFile: 'release.zip', glob:'*.json')
                
             }
         }

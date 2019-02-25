@@ -174,21 +174,23 @@ pipeline {
     }
 
     stage('Publish release json') {
-        nexusArtifactUploader(
-        nexusVersion: 'nexus3',
-        protocol: 'http',
-        nexusUrl: '62.60.42.82:8081',
-        groupId: 'com.fujitsu.fs.poa.bal',
-        version: '21.1',
-        repository: 'maven-release',
-        credentialsId: 'nexus_cred',
-        artifacts: [
-            [artifactId: poa-bal-json,
-            classifier: '',
-            file: 'release' + version + '.zip',
-            type: 'zip']
-        ]
-        )
+        steps{
+            nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: '62.60.42.82:8081',
+                groupId: 'com.fujitsu.fs.poa.bal',
+                version: '21.1',
+                repository: 'maven-release',
+                credentialsId: 'nexus_cred',
+                artifacts: [
+                    [artifactId: poa-bal-json,
+                    classifier: '',
+                    file: 'release' + version + '.zip',
+                    type: 'zip']
+                ]
+            )
+        }
     }
        stage("Mail"){
             steps{

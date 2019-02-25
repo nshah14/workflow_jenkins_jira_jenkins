@@ -44,7 +44,7 @@ import groovy.json.JsonSlurper
 
     def createJson(name, value ){
         def jsonSlurper = new JsonSlurper()
-        def object = jsonSlurper.parseText('{ 
+        def object = jsonSlurper.parseText('''{ 
 
     "release": "poa-bal",
     "version": "18.2",
@@ -64,7 +64,7 @@ import groovy.json.JsonSlurper
         }
     ]
 
-        } ')
+        } ''')
         println('Object '+object)
     }
 

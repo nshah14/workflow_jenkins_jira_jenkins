@@ -187,7 +187,7 @@ pipeline {
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
-                 new File("$WORKSPACE/release.json").write(json.toPrettyString())
+                 new File("$WORKSPACE/release/release.json").write(json.toPrettyString())
 
                 // def slurped = new JsonSlurper().parseText(json.toPrettyString())
                 // def data = readJSON text: slurped
@@ -200,25 +200,28 @@ pipeline {
         }
     }
 
-    // stage('Publish release json') {
-    //     steps{
-    //         nexusArtifactUploader(
-    //             nexusVersion: 'nexus3',
-    //             protocol: 'http',
-    //             nexusUrl: '62.60.42.82:8081',
-    //             groupId: 'com.fujitsu.fs.poa.bal',
-    //             version: '10.1',
-    //             repository: 'maven-releases',
-    //             credentialsId: 'nexus_cred',
-    //             artifacts: [
-    //                 [artifactId: 'poa-bal-json',
-    //                 classifier: '',
-    //                 file: 'release.zip',
-    //                 type: 'zip']
-    //             ]
-    //         )
-    //     }
-    // }
+    stage('Publish release json') {
+        steps{
+            scripts{
+                zip(zipFile: "$WORKSPACE/release")
+            }
+            nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: '62.60.42.82:8081',
+                groupId: 'com.fujitsu.fs.poa.bal',
+                version: '10.1',
+                repository: 'maven-releases',
+                credentialsId: 'nexus_cred',
+                artifacts: [
+                    [artifactId: 'poa-bal-json',
+                    classifier: '',
+                    file: 'release.zip',
+                    type: 'zip']
+                ]
+            )
+        }
+    }
        stage("Mail"){
             steps{
                 script{

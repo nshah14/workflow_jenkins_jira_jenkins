@@ -181,7 +181,7 @@ pipeline {
                 parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
-                def json = new groovy.json.JsonBuilder()
+                def json = new groovy.json.StreamingJsonBuilder ()
                 json release: parentMap
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "

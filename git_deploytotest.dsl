@@ -200,25 +200,25 @@ pipeline {
         }
     }
 
-    stage('Publish release json') {
-        steps{
-            nexusArtifactUploader(
-                nexusVersion: 'nexus3',
-                protocol: 'http',
-                nexusUrl: '62.60.42.82:8081',
-                groupId: 'com.fujitsu.fs.poa.bal',
-                version: '10.1',
-                repository: 'maven-releases',
-                credentialsId: 'nexus_cred',
-                artifacts: [
-                    [artifactId: 'poa-bal-json',
-                    classifier: '',
-                    file: 'release.zip',
-                    type: 'zip']
-                ]
-            )
-        }
-    }
+    // stage('Publish release json') {
+    //     steps{
+    //         nexusArtifactUploader(
+    //             nexusVersion: 'nexus3',
+    //             protocol: 'http',
+    //             nexusUrl: '62.60.42.82:8081',
+    //             groupId: 'com.fujitsu.fs.poa.bal',
+    //             version: '10.1',
+    //             repository: 'maven-releases',
+    //             credentialsId: 'nexus_cred',
+    //             artifacts: [
+    //                 [artifactId: 'poa-bal-json',
+    //                 classifier: '',
+    //                 file: 'release.zip',
+    //                 type: 'zip']
+    //             ]
+    //         )
+    //     }
+    // }
        stage("Mail"){
             steps{
                 script{

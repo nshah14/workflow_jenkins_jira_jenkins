@@ -181,14 +181,15 @@ pipeline {
                 parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
-                def json = new groovy.json.StreamingJsonBuilder ()
+                def json = new groovy.json.JsonBuilder()
                 json release: parentMap
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
-                def str_json = json.toPrettyString();
-                new File("$WORKSPACE/tmp.json").write(str_json)
+                // def str_json = json.toPrettyString();
+                def prettyJson = JsonOutput.prettyPrint(json)
+                new File("$WORKSPACE/tmp.json").write(prettyJson)
                 def data =  readJSON file: "$WORKSPACE/tmp.json"
                 // data.release = "${write_json}" as String
                 println("----------------------------------------------------------------------------------------------"+data)

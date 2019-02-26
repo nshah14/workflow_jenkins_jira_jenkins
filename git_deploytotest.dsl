@@ -182,7 +182,7 @@ pipeline {
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
                 def json = new groovy.json.JsonBuilder()
-                json rootKey: parentMap
+                json release: parentMap
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
@@ -190,7 +190,7 @@ pipeline {
                 
                 new File("$WORKSPACE/release.json").write(json.toPrettyString())
                 sh ''' mkdir "$WORKSPACE/release" 
-                        cp release.json ./release/release.json
+                        cp release.txt ./release/release.txt
                 '''
                 // def slurped = new JsonSlurper().parseText(json.toPrettyString())
                 // def data = readJSON text: slurped

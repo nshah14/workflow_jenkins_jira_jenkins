@@ -194,7 +194,7 @@ pipeline {
                 // writeJSON(file: 'release.json', json: data)
                 // new File("$WORKSPACE/release.json").write( json.toPrettyString())
                 
-                zip(zipFile: 'release.zip', glob:'*.json')
+                // zip(zipFile: 'release.zip', glob:'*.json')
                 println("done creating file")
             }
         }

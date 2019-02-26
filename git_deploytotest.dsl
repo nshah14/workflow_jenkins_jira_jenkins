@@ -188,10 +188,15 @@ pipeline {
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
                 
-                new File("$WORKSPACE/release.json").write(json.toPrettyString())
-                sh ''' mkdir "$WORKSPACE/release" 
-                        cp release.txt ./release/release.txt
-                '''
+                new File("$WORKSPACE/tmp.json").write(json.toPrettyString())
+                def data =  readJSON file: "$WORKSPACE/tmp.json"
+                // data.release = "${write_json}" as String
+                println("----------------------------------------------------------------------------------------------"+data)
+                writeJSON(file: 'release.json', json: data)
+
+                // sh ''' mkdir "$WORKSPACE/release" 
+                //         cp release.txt ./release/release.txt
+                // '''
                 // def slurped = new JsonSlurper().parseText(json.toPrettyString())
                 // def data = readJSON text: slurped
                 // writeJSON(file: 'release.json', json: data)
@@ -206,7 +211,7 @@ pipeline {
     stage('Publish release json') {
         steps{
             scripts{
-                zip(zipFile: "$WORKSPACE/release")
+                zip(zipFile: "$WORKSPACE/release.json", glob:'*.json')
             }
             nexusArtifactUploader(
                 nexusVersion: 'nexus3',

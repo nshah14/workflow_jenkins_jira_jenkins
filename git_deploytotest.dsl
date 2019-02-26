@@ -187,9 +187,11 @@ pipeline {
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
-                sh ''' mkdir "$WORKSPACE/release" '''
-                new File("$WORKSPACE/release/release.json").write(json.toPrettyString())
-
+                
+                new File("$WORKSPACE/release.json").write(json.toPrettyString())
+                sh ''' mkdir "$WORKSPACE/release" 
+                        cp release.json ./release/release.json
+                '''
                 // def slurped = new JsonSlurper().parseText(json.toPrettyString())
                 // def data = readJSON text: slurped
                 // writeJSON(file: 'release.json', json: data)

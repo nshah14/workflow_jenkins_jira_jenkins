@@ -188,7 +188,7 @@ pipeline {
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
                 // def str_json = json.toPrettyString();
-                def prettyJson = JsonOutput.prettyPrint(json)
+                def prettyJson = JsonOutput.prettyPrint(json.toString())
                 new File("$WORKSPACE/tmp.json").write(prettyJson)
                 def data =  readJSON file: "$WORKSPACE/tmp.json"
                 // data.release = "${write_json}" as String

@@ -186,8 +186,8 @@ pipeline {
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
                 // println "json output: "
                 // println groovy.json.JsonOutput.prettyPrint(json.toString())
-                 def slurper = new groovy.json.JsonSlurperClassic()
-                def result = slurper.parseText(parentMap)
+                //  def slurper = new groovy.json.JsonSlurperClassic()
+                // def result = slurper.parseText(parentMap)
                 println('<><><><><><><><><><><><><><><><><><><><>>><><><><><><><<><<>')
                 println(result)
 

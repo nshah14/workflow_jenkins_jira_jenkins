@@ -220,6 +220,7 @@ pipeline {
                 // new File("$WORKSPACE/release.json").write( json.toPrettyString())
                 
                 // zip(zipFile: 'release.zip', glob:'*.json')
+                zip(zipFile: "release.zip", glob:'*.json')
                 println("done creating file")
             }
         }
@@ -227,9 +228,7 @@ pipeline {
 
     stage('Publish release json') {
         steps{
-            scripts{
-                zip(zipFile: "$WORKSPACE/release.json", glob:'*.json')
-            }
+            
             nexusArtifactUploader(
                 nexusVersion: 'nexus3',
                 protocol: 'http',

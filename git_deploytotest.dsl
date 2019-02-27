@@ -203,12 +203,12 @@ pipeline {
                 json_obj = JsonOutput.prettyPrint(json_obj)
 
                 //put string into the file:
-                writeFile(file:'json_obj.json', text: json_obj)
+                writeFile(file:'release.json', text: json_obj)
 
 
                 // def data =  readJSON text: result
                 // data.release = "${write_json}" as String
-                println("----------------------------------------------------------------------------------------------"+data)
+                // println("----------------------------------------------------------------------------------------------"+data)
                 // writeJSON(file: 'release.json', json: data)
 
                 // sh ''' mkdir "$WORKSPACE/release" 

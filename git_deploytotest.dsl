@@ -189,7 +189,7 @@ pipeline {
                 //  def slurper = new groovy.json.JsonSlurperClassic()
                 // def result = slurper.parseText(parentMap)
                 println('<><><><><><><><><><><><><><><><><><><><>>><><><><><><><<><<>')
-                println(result)
+                // println(result)
 
 
                 // writeJSON(file: 'release.json', json: json.toPrettyString())

@@ -181,13 +181,13 @@ pipeline {
                 parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
-                def json = new groovy.json.JsonBuilder()
-                json release: parentMap
+                // def json = new groovy.json.JsonBuilder()
+                // json release: parentMap
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
-                println "json output: "
-                println groovy.json.JsonOutput.prettyPrint(json.toString())
+                // println "json output: "
+                // println groovy.json.JsonOutput.prettyPrint(json.toString())
                  def slurper = new groovy.json.JsonSlurperClassic()
-                def result = slurper.parseText(json.toPrettyString())
+                def result = slurper.parseText(parentMap)
                 println('<><><><><><><><><><><><><><><><><><><><>>><><><><><><><<><<>')
                 println(result)
 
@@ -196,7 +196,9 @@ pipeline {
                 // def str_json = json.toPrettyString();
                 // def prettyJson = JsonOutput.prettyPrint(json.toString())
                 // new File("$WORKSPACE/tmp.json").write(result)
-                def json_obj = JsonOutput.toJson(result)
+                def json_obj = JsonOutput.toJson(parentMap)
+                println("json object")
+                println(json_obj)
                 //if you need pretty print (multiline) json
                 json_obj = JsonOutput.prettyPrint(json_obj)
 

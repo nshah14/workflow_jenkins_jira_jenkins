@@ -196,10 +196,18 @@ pipeline {
                 // def str_json = json.toPrettyString();
                 // def prettyJson = JsonOutput.prettyPrint(json.toString())
                 // new File("$WORKSPACE/tmp.json").write(result)
-                def data =  readJSON text: result
+                def json_obj = JsonOutput.toJson(result)
+                //if you need pretty print (multiline) json
+                json_obj = JsonOutput.prettyPrint(json_obj)
+
+                //put string into the file:
+                writeFile(file:'json_obj.json', text: json_obj)
+
+
+                // def data =  readJSON text: result
                 // data.release = "${write_json}" as String
                 println("----------------------------------------------------------------------------------------------"+data)
-                writeJSON(file: 'release.json', json: data)
+                // writeJSON(file: 'release.json', json: data)
 
                 // sh ''' mkdir "$WORKSPACE/release" 
                 //         cp release.txt ./release/release.txt

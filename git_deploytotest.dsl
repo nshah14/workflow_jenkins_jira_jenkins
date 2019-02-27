@@ -186,6 +186,12 @@ pipeline {
                 // JSONObject JSO = JSONObject.fromObject(json.toString());
                 println "json output: "
                 println groovy.json.JsonOutput.prettyPrint(json.toString())
+                 def slurper = new groovy.json.JsonSlurperClassic()
+                def result = slurper.parseText(json.toPrettyString())
+                println('<><><><><><><><><><><><><><><><><><><><>>><><><><><><><<><<>')
+                println(result)
+
+
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
                 // def str_json = json.toPrettyString();
                 def prettyJson = JsonOutput.prettyPrint(json.toString())

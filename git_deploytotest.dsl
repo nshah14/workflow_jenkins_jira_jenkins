@@ -181,45 +181,14 @@ pipeline {
                 parentMap["version"] = "10.1"
                 parentMap["artifacts"]=lst
                 println("parent Map  >>>>> "+parentMap)
-                // def json = new groovy.json.JsonBuilder()
-                // json release: parentMap
-                // JSONObject JSO = JSONObject.fromObject(json.toString());
-                // println "json output: "
-                // println groovy.json.JsonOutput.prettyPrint(json.toString())
-                //  def slurper = new groovy.json.JsonSlurperClassic()
-                // def result = slurper.parseText(parentMap)
                 println('<><><><><><><><><><><><><><><><><><><><>>><><><><><><><<><<>')
-                // println(result)
-
-
-                // writeJSON(file: 'release.json', json: json.toPrettyString())
-                // def str_json = json.toPrettyString();
-                // def prettyJson = JsonOutput.prettyPrint(json.toString())
-                // new File("$WORKSPACE/tmp.json").write(result)
                 def json_obj = JsonOutput.toJson(parentMap)
                 println("json object")
                 println(json_obj)
                 //if you need pretty print (multiline) json
                 json_obj = JsonOutput.prettyPrint(json_obj)
-
                 //put string into the file:
                 writeFile(file:'release.json', text: json_obj)
-
-
-                // def data =  readJSON text: result
-                // data.release = "${write_json}" as String
-                // println("----------------------------------------------------------------------------------------------"+data)
-                // writeJSON(file: 'release.json', json: data)
-
-                // sh ''' mkdir "$WORKSPACE/release" 
-                //         cp release.txt ./release/release.txt
-                // '''
-                // def slurped = new JsonSlurper().parseText(json.toPrettyString())
-                // def data = readJSON text: slurped
-                // writeJSON(file: 'release.json', json: data)
-                // new File("$WORKSPACE/release.json").write( json.toPrettyString())
-                
-                // zip(zipFile: 'release.zip', glob:'*.json')
                 zip(zipFile: "release.zip", glob:'*.json')
                 println("done creating file")
             }

@@ -195,8 +195,8 @@ pipeline {
                 // writeJSON(file: 'release.json', json: json.toPrettyString())
                 // def str_json = json.toPrettyString();
                 // def prettyJson = JsonOutput.prettyPrint(json.toString())
-                new File("$WORKSPACE/tmp.json").write(result)
-                def data =  readJSON file: "$WORKSPACE/tmp.json"
+                // new File("$WORKSPACE/tmp.json").write(result)
+                def data =  readJSON text: result
                 // data.release = "${write_json}" as String
                 println("----------------------------------------------------------------------------------------------"+data)
                 writeJSON(file: 'release.json', json: data)
